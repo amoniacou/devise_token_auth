@@ -1,0 +1,73 @@
+name: Ruby
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: devise_token_auth
+          POSTGRES_DB: devise_token_auth_test
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      mysql:
+        image: mariadb
+        env:
+          MYSQL_ROOT_PASSWORD: mysql
+          MYSQL_USER: devise_token_auth
+          MYSQL_PASSWORD: mysql
+          MYSQL_DATABASE: devise_token_auth_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd mysqladmin ping
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      mongodb:
+        image: mongo
+        env:
+          MONGO_INITDB_ROOT_USERNAME: devise_token_auth
+          MONGO_INITDB_ROOT_PASSWORD: mongodb
+          MONGO_INITDB_DATABASE: devise_token_auth_test
+        ports:
+          - 27017:27017
+    strategy:
+      matrix:
+        ruby-version: ['2.7', '3.0']
+        rails-version: ['6.0', '6.1']
+        database: ['postgresql', 'mysql', 'mongodb']
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup System
+      run: |
+        sudo apt-get install libsqlite3-dev
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby-version }}
+        bundler-cache: false # runs 'bundle install' and caches installed gems automatically
+    - name: Bundler
+      run: |
+        export BUNDLE_GEMFILE="${GITHUB_WORKSPACE}/gemfiles/ruby_${{ matrix.ruby-version }}_rails_${{ matrix.rails-version }}_${{ matrix.database }}.gemfile"
+        bundle install --jobs 4 --retry 3
+    - name: Run tests
+      run: |
+        export DB="${{ matrix.database }}"
+        if [[ $DB == "mongodb" ]]; then unset DB; export DEVISE_TOKEN_AUTH_ORM="mongoid"; fi
+        if [[ $DEVISE_TOKEN_AUTH_ORM == "" ]]; then bundle exec rake --trace db:migrate; fi
+        export BUNDLE_GEMFILE="${GITHUB_WORKSPACE}/gemfiles/ruby_${{ matrix.ruby-version }}_rails_${{ matrix.rails-version }}_${{ matrix.database }}.gemfile"
+        bundle exec rake

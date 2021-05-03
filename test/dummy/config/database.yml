@@ -4,14 +4,14 @@ sqlite: &sqlite
 
 mysql: &mysql
   adapter: mysql2
-  username: root
-  password:
+  username: devise_token_auth
+  password: mysql
   database: "devise_token_auth_<%= Rails.env %>"
 
 postgresql: &postgresql
   adapter: postgresql
-  username: postgres
-  password:
+  username: devise_token_auth
+  password: postgres
   database: "devise_token_auth_<%= Rails.env %>"
   min_messages: ERROR
 
