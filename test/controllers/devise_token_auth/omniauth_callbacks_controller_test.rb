@@ -17,7 +17,7 @@ class OmniauthTest < ActionDispatch::IntegrationTest
   end
 
   def get_parsed_data_json
-    encoded_json_data = @response.body.match(/var data \= JSON.parse\(decodeCGIComponent\(\'(.+)\'\)\)\;/)[1]
+    encoded_json_data = @response.body.match(/var data \= JSON.parse\(decodeURIComponent\(\'(.+)\'\)\)\;/)[1]
     JSON.parse(CGI.unescape(encoded_json_data))
   end
 

@@ -26,7 +26,7 @@ module DeviseTokenAuth
         inclusion = 'include DeviseTokenAuth::Concerns::User'
         unless parse_file_for_line(fname, inclusion)
 
-          active_record_needle = (Rails::VERSION::MAJOR >= 5) ? 'ApplicationRecord' : 'ActiveRecord::Base'
+          active_record_needle = 'ApplicationRecord'
           inject_into_file fname, after: "class #{user_class} < #{active_record_needle}\n" do <<-'RUBY'
             # Include default devise modules.
             devise :database_authenticatable, :registerable,
@@ -56,7 +56,7 @@ module DeviseTokenAuth
     end
 
     def postgres_correct_version?
-      database_version > '9.3'
+      database_version > '10.0'
     end
 
     def mysql?
@@ -75,12 +75,8 @@ module DeviseTokenAuth
       ActiveRecord::Base.connection.select_value('SELECT VERSION()')
     end
 
-    def rails_5_or_newer?
-      Rails::VERSION::MAJOR >= 5
-    end
-
     def primary_key_type
-      primary_key_string if rails_5_or_newer?
+      primary_key_string
     end
 
     def primary_key_string
