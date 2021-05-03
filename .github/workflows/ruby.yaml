@@ -15,7 +15,7 @@ jobs:
         env:
           POSTGRES_USER: devise_token_auth
           POSTGRES_DB: devise_token_auth_test
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_PASSWORD: postgresql
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -26,9 +26,9 @@ jobs:
       mysql2:
         image: mariadb
         env:
-          MYSQL_ROOT_PASSWORD: mysql
+          MYSQL_ROOT_PASSWORD: mysql2
           MYSQL_USER: devise_token_auth
-          MYSQL_PASSWORD: mysql
+          MYSQL_PASSWORD: mysql2
           MYSQL_DATABASE: devise_token_auth_test
         ports:
           - 3306:3306
