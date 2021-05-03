@@ -20,5 +20,6 @@ end
 
     gem 'mongoid', "~> #{set[:mongoid]}"
     gem 'mongoid-locker', '~> 1.0'
+    gem 'database_cleaner-mongoid'
   end
 end
