@@ -68,7 +68,7 @@ jobs:
       run: |
         export DB="${{ matrix.database }}"
         if [[ $DB == "mongodb" ]]; then unset DB; export DEVISE_TOKEN_AUTH_ORM="mongoid"; fi
-        if [[ $DB != "mongodb" ]]; then export DATABSE_URL="${{ secrets.database }}://devise_token_auth:${{ secrets.database }}@localhost/devise_token_auth_test"; fi
+        if [[ $DB != "mongodb" ]]; then export DATABASE_URL="${{ secrets.database }}://devise_token_auth:${{ secrets.database }}@localhost/devise_token_auth_test"; fi
         if [[ $DEVISE_TOKEN_AUTH_ORM == "" ]]; then bundle exec rake --trace db:migrate; fi
         export BUNDLE_GEMFILE="${GITHUB_WORKSPACE}/gemfiles/ruby_${{ matrix.ruby-version }}_rails_${{ matrix.rails-version }}_${{ matrix.database }}.gemfile"
         bundle exec rake
