@@ -1,9 +1,7 @@
 test:
   clients:
     default:
-      database: devise_token_auth_test
-      hosts:
-        - localhost:27017
+      uri: 'mongodb://devise_token_auth:mongodb@localhost:27017/devise_token_auth_test'
       options:
         read:
           mode: :primary
