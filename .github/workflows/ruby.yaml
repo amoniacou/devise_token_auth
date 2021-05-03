@@ -71,3 +71,5 @@ jobs:
         if [[ $DEVISE_TOKEN_AUTH_ORM == "" ]]; then bundle exec rake --trace db:migrate; fi
         export BUNDLE_GEMFILE="${GITHUB_WORKSPACE}/gemfiles/ruby_${{ matrix.ruby-version }}_rails_${{ matrix.rails-version }}_${{ matrix.database }}.gemfile"
         bundle exec rake
+      env:
+        RAILS_ENV: test
