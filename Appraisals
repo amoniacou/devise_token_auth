@@ -7,6 +7,7 @@
   appraise "rails-#{rails[:name]}" do
     gem 'rails', "~> #{rails[:version]}"
     gem 'mysql2'
+    gem 'database_cleaner-active_record'
     gem 'pg'
   end
 end

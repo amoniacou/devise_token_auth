@@ -28,7 +28,7 @@ group :development, :test do
 
   # testing
   # gem 'spring'
-  gem 'database_cleaner'
+  gem 'database_cleaner', require: false
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'fuzz_ball'
@@ -57,16 +57,6 @@ group :development do
 end
 
 if ENV['MONGOID_VERSION']
-  case ENV['MONGOID_VERSION']
-  when /^7/
-    gem 'mongoid', '~> 7'
-  when /^6/
-    gem 'mongoid', '~> 6'
-  when /^5/
-    gem 'mongoid', '~> 5'
-  else
-    gem 'mongoid', '>= 5'
-  end
-
+  gem 'mongoid', '~> 7'
   gem 'mongoid-locker', '~> 1.0'
 end
